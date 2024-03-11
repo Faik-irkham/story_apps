@@ -23,7 +23,9 @@ class CustomFormField extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w400),
+              color: Colors.white,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         if (isShowTitle) const SizedBox(height: 8),
         TextFormField(
@@ -31,6 +33,9 @@ class CustomFormField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: !isShowTitle ? title : null,
+            hintStyle: const TextStyle(
+              color: Colors.white,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(48),
             ),
