@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:story_apps/widgets/button_widget.dart';
 import 'package:story_apps/widgets/custom_form.dart';
 
@@ -63,7 +64,9 @@ class LoginPage extends StatelessWidget {
                       CustomFilledButton(
                         title: 'Sign In',
                         width: double.infinity,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.goNamed('home_page');
+                        },
                       ),
                       const SizedBox(height: 20),
                       RichText(
