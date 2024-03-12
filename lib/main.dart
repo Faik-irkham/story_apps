@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/login_page.dart';
 
 void main() {
@@ -16,9 +17,17 @@ class MyApp extends StatelessWidget {
           return const LoginPage();
         },
       ),
+      GoRoute(
+        path: '/',
+        name: 'home_page',
+        builder: (context, state) {
+          return const HomePage();
+        },
+      ),
     ],
     initialLocation: '/login',
     debugLogDiagnostics: true,
+    routerNeglect: true,
   );
 
   MyApp({super.key});
