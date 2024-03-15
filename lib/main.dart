@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/login_page.dart';
+import 'package:story_apps/ui/register_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,6 +16,13 @@ class MyApp extends StatelessWidget {
         name: 'login',
         builder: (context, state) {
           return const LoginPage();
+        },
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) {
+          return const RegisterPage();
         },
       ),
       GoRoute(
