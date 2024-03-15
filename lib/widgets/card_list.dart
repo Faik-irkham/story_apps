@@ -14,9 +14,9 @@ class CardListStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 25),
+      margin: const EdgeInsets.only(bottom: 20),
       width: double.infinity,
-      height: 250,
+      height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
@@ -28,23 +28,33 @@ class CardListStory extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             width: double.infinity,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.5),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(10),
                 bottomRight: Radius.circular(10),
               ),
             ),
-            child: Center(
-              child: Text(
-                name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
+                Text(
+                  '${description.split(' ').take(10).join(' ')}...',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
