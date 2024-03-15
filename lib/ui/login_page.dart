@@ -80,7 +80,10 @@ class LoginPage extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: ' Sign up',
-                              recognizer: TapGestureRecognizer()..onTap = () {},
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  context.goNamed('register');
+                                },
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
