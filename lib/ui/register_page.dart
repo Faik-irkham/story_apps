@@ -15,6 +15,7 @@ class RegisterPage extends StatelessWidget {
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           child: Stack(
+             
             children: [
               Container(
                 width: double.infinity,
