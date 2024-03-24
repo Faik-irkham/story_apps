@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:story_apps/data/model/list_story_model.dart';
 
 class CardListStory extends StatelessWidget {
-  final String imageUrl;
-  final String name;
-  final String description;
+  final ListStoryModel stories;
   const CardListStory({
     super.key,
-    required this.imageUrl,
-    required this.name,
-    required this.description,
+    required this.stories,
   });
 
   @override
@@ -28,7 +25,7 @@ class CardListStory extends StatelessWidget {
                 topRight: Radius.circular(15.0),
               ),
               image: DecorationImage(
-                image: AssetImage(imageUrl),
+                image: NetworkImage(stories.photoUrl!),
                 fit: BoxFit.cover,
               ),
             ),
@@ -43,13 +40,13 @@ class CardListStory extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name,
+                  stories.name!,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  '${description.split(' ').take(10).join(' ')}...',
+                  '${stories.description!.split(' ').take(10).join(' ')}...',
                 ),
               ],
             ),

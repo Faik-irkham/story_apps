@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:story_apps/provider/story_provider.dart';
+import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/card_list.dart';
 
 class HomePage extends StatelessWidget {
@@ -52,43 +55,78 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: const SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 60,
-                    horizontal: 10,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CardListStory(
-                        imageUrl: 'assets/coffee1.jpg',
-                        name: 'Dimas',
-                        description: 'sdmksmdskdk',
-                      ),
-                      CardListStory(
-                        imageUrl: 'assets/coffee1.jpg',
-                        name: 'Dimas',
-                        description: 'sdmksmdskdk',
-                      ),
-                      CardListStory(
-                        imageUrl: 'assets/coffee1.jpg',
-                        name: 'Dimas',
-                        description: 'sdmksmdskdk',
-                      ),
-                      CardListStory(
-                        imageUrl: 'assets/coffee1.jpg',
-                        name: 'Dimas',
-                        description: 'sdmksmdskdk',
-                      ),
-                      CardListStory(
-                        imageUrl: 'assets/coffee1.jpg',
-                        name: 'Dimas',
-                        description: 'sdmksmdskdk',
-                      ),
-                    ],
-                  ),
+                child: Consumer<StoryProvider>(
+                  builder: (context, provider, _) {
+                    if (provider.state == ResultState.loading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (provider.state == ResultState.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: provider.result.listStory.length,
+                        itemBuilder: (context, index) {
+                          var stories = provider.result.listStory[index];
+                          return GestureDetector(
+                            onTap: () {},
+                            child: CardListStory(
+                              stories: stories,
+                            ),
+                          );
+                        },
+                      );
+                    } else if (provider.state == ResultState.noData) {
+                      return const Center(
+                        child: Material(
+                          child: Text('Tidak ada Data!'),
+                        ),
+                      );
+                    } else {
+                      return const Center(
+                        child: Material(
+                          child: Text('Error: state null'),
+                        ),
+                      );
+                    }
+                  },
                 ),
+                // child: SingleChildScrollView(
+                //   physics: const AlwaysScrollableScrollPhysics(),
+                //   padding: const EdgeInsets.symmetric(
+                //     vertical: 40,
+                //     horizontal: 10,
+                //   ),
+                //   child: Consumer<StoryProvider>(
+                //     builder: (context, state, _) {
+                //       if (state.state == ResultState.loading) {
+                //         return const Center(child: CircularProgressIndicator());
+                //       } else if (state.state == ResultState.hasData) {
+                //         return ListView.builder(
+                //           itemCount: state.result.listStory.length,
+                //           itemBuilder: (context, index) {
+                //             var stories = state.result.listStory[index];
+                //             return GestureDetector(
+                //               onTap: () {},
+                //               child: CardListStory(
+                //                 stories: stories,
+                //               ),
+                //             );
+                //           },
+                //         );
+                //       } else if (state.state == ResultState.noData) {
+                //         return const Center(
+                //           child: Material(
+                //             child: Text('Tidak ada Data!'),
+                //           ),
+                //         );
+                //       } else {
+                //         return const Center(
+                //           child: Material(
+                //             child: Text('dfdffd'),
+                //           ),
+                //         );
+                //       }
+                //     },
+                //   ),
+                // ),
               ),
             ],
           ),
