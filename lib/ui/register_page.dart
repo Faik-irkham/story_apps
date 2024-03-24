@@ -2,11 +2,32 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:story_apps/widgets/button_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:story_apps/data/model/sign_up_form_model.dart';
+import 'package:story_apps/provider/auth_provider.dart';
+import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/custom_form.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final nameController = TextEditingController(text: '');
+  final emailController = TextEditingController(text: '');
+  final passwordController = TextEditingController(text: '');
+
+  bool validate() {
+    if (nameController.text.isEmpty &&
+        emailController.text.isEmpty &&
+        passwordController.text.isEmpty) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +36,6 @@ class RegisterPage extends StatelessWidget {
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           child: Stack(
-             
             children: [
               Container(
                 width: double.infinity,
@@ -51,26 +71,60 @@ class RegisterPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      const CustomFormField(
+                      CustomFormField(
+                        controller: nameController,
                         title: 'Name',
                         isShowTitle: false,
                       ),
                       const SizedBox(height: 15),
-                      const CustomFormField(
+                      CustomFormField(
+                        controller: emailController,
                         title: 'Email',
                         isShowTitle: false,
+                        type: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 15),
-                      const CustomFormField(
+                      CustomFormField(
+                        controller: passwordController,
                         title: 'Password',
                         isShowTitle: false,
                         obscureText: true,
                       ),
                       const SizedBox(height: 30),
-                      CustomFilledButton(
-                        title: 'Register',
-                        width: double.infinity,
-                        onPressed: () {},
+                      Consumer<AuthProvider>(
+                        builder: (context, provider, _) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (validate()) {
+                                Provider.of<AuthProvider>(context, listen: false)
+                                    .apiService
+                                    .register(
+                                      SignUpFormModel(
+                                        name: nameController.text,
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                      ),
+                                    );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Review submitted successfully.'),
+                                  ),
+                                );
+                                context.goNamed('login');
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Semua field harus diisi'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: provider.state == ResultState.loading
+                                ? const CircularProgressIndicator()
+                                : const Text('Register'),
+                          );
+                        },
                       ),
                       const SizedBox(height: 20),
                       RichText(
