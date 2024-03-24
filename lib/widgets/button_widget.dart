@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomFilledButton extends StatelessWidget {
-  final String title;
   final double width;
   final double height;
   final VoidCallback? onPressed;
+  final Widget child;
 
   const CustomFilledButton({
     super.key,
-    required this.title,
+    required this.child,
     this.width = double.infinity,
     this.height = 50,
     this.onPressed,
@@ -22,18 +22,12 @@ class CustomFilledButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(56),
-            )),
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Color(0XFF12111F),
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(56),
           ),
         ),
+        child: child,
       ),
     );
   }
