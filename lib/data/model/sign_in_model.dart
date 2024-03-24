@@ -1,0 +1,19 @@
+import 'package:story_apps/data/model/login_result_model.dart';
+
+class SignInModel {
+  bool error;
+  String message;
+  LoginResult loginResult;
+
+  SignInModel({
+    required this.error,
+    required this.message,
+    required this.loginResult,
+  });
+
+  factory SignInModel.fromJson(Map<String, dynamic> json) => SignInModel(
+        error: json["error"],
+        message: json["message"],
+        loginResult: LoginResult.fromJson(json["loginResult"]),
+      );
+}
