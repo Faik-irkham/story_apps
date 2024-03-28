@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:story_apps/common/common.dart';
 import 'package:story_apps/data/api/api_service.dart';
 import 'package:story_apps/data/preference/auth_preference.dart';
 import 'package:story_apps/provider/auth_provider.dart';
@@ -43,10 +44,13 @@ class MyApp extends StatelessWidget {
       child: Consumer<CredentialProvider>(
         builder: (context, auth, _) {
           return MaterialApp.router(
-            routerConfig: router(context),
             theme: ThemeData(
               useMaterial3: true,
             ),
+            routerConfig: router(context),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            
           );
         },
       ),
