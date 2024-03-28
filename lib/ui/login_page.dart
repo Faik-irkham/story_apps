@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/common/common.dart';
 import 'package:story_apps/data/model/sign_in_model.dart';
 import 'package:story_apps/provider/auth_provider.dart';
 import 'package:story_apps/provider/credential_provider.dart';
@@ -62,9 +65,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Sign In',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.signinTitle,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
@@ -97,16 +100,22 @@ class _LoginPageState extends State<LoginPage> {
                                   password,
                                 );
                                 if (response.error == false) {
-                                  // ignore: use_build_context_synchronously
-                                  context.goNamed('home_page');
+                                  context.goNamed('bottomNav');
                                   var result = response.loginResult;
                                   cred.setCredential(
                                       result.token, result.name, email);
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(response.message),
+                                    ),
+                                  );
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Login gagal!'),
+                                   SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .textAuthWarning),
                                   ),
                                 );
                               }
@@ -115,9 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ? const CircularProgressIndicator(
                                     color: Colors.black,
                                   )
-                                : const Text(
-                                    'Sign In',
-                                    style: TextStyle(
+                                : Text(
+                                    AppLocalizations.of(context)!.signinTitle,
+                                    style: const TextStyle(
                                       color: Color(0XFF12111F),
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
@@ -129,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 20),
                       RichText(
                         text: TextSpan(
-                          text: 'Don\'t have an account?',
+                          text: AppLocalizations.of(context)!.descriptionLogin,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -137,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           children: [
                             TextSpan(
-                              text: ' Sign up',
+                              text:
+                                  AppLocalizations.of(context)!.registerButton,
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   context.goNamed('register');

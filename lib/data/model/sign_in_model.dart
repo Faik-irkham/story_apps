@@ -11,9 +11,13 @@ class SignInModel {
     required this.loginResult,
   });
 
-  factory SignInModel.fromJson(Map<String, dynamic> json) => SignInModel(
-        error: json["error"],
-        message: json["message"],
-        loginResult: LoginResult.fromJson(json["loginResult"]),
-      );
+  factory SignInModel.fromJson(Map<String, dynamic> json) {
+    return SignInModel(
+      error: json["error"],
+      message: json["message"],
+      loginResult: json["loginResult"] != null
+          ? LoginResult.fromJson(json["loginResult"])
+          : LoginResult(userId: '', name: '', token: ''),
+    );
+  }
 }
