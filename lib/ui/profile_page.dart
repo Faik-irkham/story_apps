@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:story_apps/provider/credential_provider.dart';
+import 'package:story_apps/widgets/button_widget.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -17,8 +21,10 @@ class ProfilePage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              _showLogoutDialog(context);
+            },
           ),
         ],
       ),
@@ -213,6 +219,54 @@ class ProfilePage extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(),
           ),
+        );
+      },
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            CustomFilledButton(
+              height: 40,
+              width: MediaQuery.of(context).size.width / 3.2,
+              onPressed: () {
+                final auth =
+                    Provider.of<CredentialProvider>(context, listen: false);
+                auth.deleteCredential();
+                context.goNamed('login');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Behasil Keluar!'),
+                  ),
+                );
+              },
+              child: const Text(
+                'Logout',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Add logout logic here
+            //     Navigator.of(context).pop();
+            //   },
+            //   child: const Text('Logout'),
+            // ),
+          ],
         );
       },
     );
