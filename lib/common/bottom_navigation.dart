@@ -11,7 +11,7 @@ class CustomBottomNavigation extends StatefulWidget {
 }
 
 class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
-  int _bottomNavIndex = 2;
+  int _bottomNavIndex = 0;
 
   final List<BottomNavigationBarItem> _navBarItems = [
     const BottomNavigationBarItem(
