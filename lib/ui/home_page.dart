@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/common/common.dart';
+import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/card_list.dart';
@@ -20,17 +23,27 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
+          Consumer<CredentialProvider>(builder: (context, auth, _) {
+            return IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                auth.deleteCredential();
+                context.goNamed('login');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Behasil Keluar!'),
+                  ),
+                );
+              },
+            );
+          }),
           IconButton(
             icon: const Icon(Icons.flag),
-            onPressed: () {
-              // Aksi ketika tombol "Flag" ditekan
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              // Aksi ketika tombol "Add Story" ditekan
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -59,24 +72,22 @@ class HomePage extends StatelessWidget {
                   builder: (context, provider, _) {
                     if (provider.state == ResultState.loading) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (provider.state == ResultState.hasData) {
+                    } else if (provider.state == ResultState.done) {
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: provider.result.listStory.length,
                         itemBuilder: (context, index) {
                           var stories = provider.result.listStory[index];
-                          return GestureDetector(
-                            onTap: () {},
-                            child: CardListStory(
-                              stories: stories,
-                            ),
+                          return CardListStory(
+                            stories: stories,
                           );
                         },
                       );
-                    } else if (provider.state == ResultState.noData) {
-                      return const Center(
+                    } else if (provider.state == ResultState.error) {
+                      return  Center(
                         child: Material(
-                          child: Text('Tidak ada Data!'),
+                          child: Text(
+                                AppLocalizations.of(context)!.noDataTitle),
                         ),
                       );
                     } else {
@@ -88,45 +99,6 @@ class HomePage extends StatelessWidget {
                     }
                   },
                 ),
-                // child: SingleChildScrollView(
-                //   physics: const AlwaysScrollableScrollPhysics(),
-                //   padding: const EdgeInsets.symmetric(
-                //     vertical: 40,
-                //     horizontal: 10,
-                //   ),
-                //   child: Consumer<StoryProvider>(
-                //     builder: (context, state, _) {
-                //       if (state.state == ResultState.loading) {
-                //         return const Center(child: CircularProgressIndicator());
-                //       } else if (state.state == ResultState.hasData) {
-                //         return ListView.builder(
-                //           itemCount: state.result.listStory.length,
-                //           itemBuilder: (context, index) {
-                //             var stories = state.result.listStory[index];
-                //             return GestureDetector(
-                //               onTap: () {},
-                //               child: CardListStory(
-                //                 stories: stories,
-                //               ),
-                //             );
-                //           },
-                //         );
-                //       } else if (state.state == ResultState.noData) {
-                //         return const Center(
-                //           child: Material(
-                //             child: Text('Tidak ada Data!'),
-                //           ),
-                //         );
-                //       } else {
-                //         return const Center(
-                //           child: Material(
-                //             child: Text('dfdffd'),
-                //           ),
-                //         );
-                //       }
-                //     },
-                //   ),
-                // ),
               ),
             ],
           ),
