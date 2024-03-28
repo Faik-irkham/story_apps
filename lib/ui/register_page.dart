@@ -1,11 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/common/common.dart';
+import 'package:story_apps/data/model/register_model.dart';
 import 'package:story_apps/data/model/sign_up_form_model.dart';
 import 'package:story_apps/provider/auth_provider.dart';
 import 'package:story_apps/utils/response_state.dart';
+import 'package:story_apps/widgets/button_widget.dart';
 import 'package:story_apps/widgets/custom_form.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -93,25 +98,26 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(height: 30),
                       Consumer<AuthProvider>(
                         builder: (context, provider, _) {
-                          return ElevatedButton(
-                            onPressed: () {
+                          return CustomFilledButton(
+                            onPressed: () async {
                               if (validate()) {
-                                Provider.of<AuthProvider>(context, listen: false)
-                                    .apiService
-                                    .register(
-                                      SignUpFormModel(
-                                        name: nameController.text,
-                                        email: emailController.text,
-                                        password: passwordController.text,
-                                      ),
-                                    );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Review submitted successfully.'),
+                                RegisterModel response =
+                                    await provider.register(
+                                  SignUpFormModel(
+                                    name: nameController.text,
+                                    email: emailController.text,
+                                    password: passwordController.text,
                                   ),
                                 );
-                                context.goNamed('login');
+                                if (response.error == false) {
+                                  context.goNamed('login');
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(response.message),
+                                    ),
+                                  );
+                                }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -121,15 +127,26 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                             },
                             child: provider.state == ResultState.loading
-                                ? const CircularProgressIndicator()
-                                : const Text('Register'),
+                                ? const CircularProgressIndicator(
+                                    color: Colors.black,
+                                  )
+                                : Text(
+                                    AppLocalizations.of(context)!
+                                        .registerButton,
+                                    style: const TextStyle(
+                                      color: Color(0XFF12111F),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                           );
                         },
                       ),
                       const SizedBox(height: 20),
                       RichText(
                         text: TextSpan(
-                          text: 'have an account?',
+                          text:
+                              AppLocalizations.of(context)!.descriptionRegister,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -137,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           children: [
                             TextSpan(
-                              text: ' Sign In',
+                              text: AppLocalizations.of(context)!.signinTitle,
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   context.goNamed('login');
