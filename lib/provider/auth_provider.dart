@@ -11,7 +11,7 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider({required this.apiService});
 
   ResultState? _state;
-  String _message = '';
+  final String _message = '';
 
   String get message => _message;
   ResultState? get state => _state;
@@ -21,13 +21,13 @@ class AuthProvider extends ChangeNotifier {
       _state = ResultState.loading;
       notifyListeners();
       final response = await apiService.register(data);
-      _state = ResultState.hasData;
+      _state = ResultState.done;
       notifyListeners();
       return response;
     } catch (e) {
       _state = ResultState.error;
       notifyListeners();
-      throw _message = 'Failed Register';
+      throw Exception('Failed Register: $e');
     }
   }
 
@@ -36,7 +36,7 @@ class AuthProvider extends ChangeNotifier {
       _state = ResultState.loading;
       notifyListeners();
       final response = await apiService.login(email, password);
-      _state = ResultState.hasData;
+      _state = ResultState.done;
       notifyListeners();
       return response;
     } catch (e) {
