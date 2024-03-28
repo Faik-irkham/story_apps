@@ -1,0 +1,11 @@
+{
+  "signinTitle": "Masuk",
+  "registerButton": "Daftar",
+  "descriptionLogin": "Belum punya akun? ",
+  "descriptionRegister": "Sudah punya akun? ",
+  "detailPostTitle": "Rincian",
+  "noDataTitle": "Tidak ada data",
+  "uploadTitle": "Postingan Baru",
+  "hintDescription": "Tulis keterangan",
+  "textAuthWarning": "Semua field wajib diisi"
+}

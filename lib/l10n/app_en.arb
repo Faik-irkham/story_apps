@@ -1,0 +1,11 @@
+{
+  "signinTitle": "Sign In",
+  "registerButton": "Register",
+  "descriptionLogin": "Don't have an account? ",
+  "descriptionRegister": "Don't have an account yet? ",
+  "detailPostTitle": "Detail",
+  "noDataTitle": "No data",
+  "uploadTitle": "New Post",
+  "hintDescription": "Write a caption",
+  "textAuthWarning": "All fields are mandatory to fill in"
+}
