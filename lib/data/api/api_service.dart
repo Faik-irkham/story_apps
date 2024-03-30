@@ -82,21 +82,17 @@ class ApiService {
         'POST',
         Uri.parse('$_baseUrl/stories'),
       );
-      // Add form fields
+      
       request.fields['description'] = description;
       if (lat != null) request.fields['lat'] = lat.toString();
       if (lon != null) request.fields['lon'] = lon.toString();
 
-      // Add file
       request.files.add(await http.MultipartFile.fromPath('photo', imagePath));
 
-      // Add headers
       request.headers['Content-Type'] = 'multipart/form-data';
       request.headers['Authorization'] = 'Bearer $token';
 
-      // Send request
       var response = await request.send();
-      // Get response
       var responseBody = await response.stream.bytesToString();
       var jsonResponse = json.decode(responseBody);
 
