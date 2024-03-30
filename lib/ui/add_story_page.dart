@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -35,7 +37,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
         });
       } else {
         showDialog(
-          // ignore: use_build_context_synchronously
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Error'),
@@ -180,32 +181,42 @@ class _AddStoryPageState extends State<AddStoryPage> {
                                 context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('error'),
+                                  content: Text('Error occurred.'),
                                 ),
                               );
-                            }
-                            final description = _descriptionController.text;
-                            final token =
-                                await credProvider.preferences.getToken();
+                            } else {
+                              // Tambahkan penanganan tombol di sini
+                              if (storyProvider.state != ResultState.loading) {
+                                final description = _descriptionController.text;
+                                final token =
+                                    await credProvider.preferences.getToken();
 
-                            final response = await storyProvider.postStory(
-                              description: description,
-                              imagePath: _imageFile!.path,
-                              token: token,
-                              lat: null,
-                              lon: null,
-                            );
+                                final response = await storyProvider.postStory(
+                                  description: description,
+                                  imagePath: _imageFile!.path,
+                                  token: token,
+                                  lat: null,
+                                  lon: null,
+                                );
 
-                            if (response.error == false && context.mounted) {
-                              storyProvider.refresh();
-                              // context.goNamed('bottomNav');
-                              context.goNamed('bottomNav');
+                                if (response.error == false &&
+                                    context.mounted) {
+                                  storyProvider.refresh();
+                                  context.goNamed('bottomNav');
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Failed to upload story.'),
+                                    ),
+                                  );
+                                }
+                              }
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
-                                    'An error occurred while uploading the story.'),
+                                    'Please provide description and image.'),
                               ),
                             );
                           }
@@ -224,7 +235,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
                               ),
                       );
                     },
-                  )
+                  ),
                 ],
               ),
             ),
