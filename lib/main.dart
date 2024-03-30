@@ -6,6 +6,7 @@ import 'package:story_apps/data/api/api_service.dart';
 import 'package:story_apps/data/preference/auth_preference.dart';
 import 'package:story_apps/provider/auth_provider.dart';
 import 'package:story_apps/provider/credential_provider.dart';
+import 'package:story_apps/provider/localizations_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/router/router.dart';
 
@@ -40,10 +41,14 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => LocalizationProvider(),
+        ),
       ],
-      child: Consumer<CredentialProvider>(
-        builder: (context, auth, _) {
+      child: Consumer2<CredentialProvider, LocalizationProvider>(
+        builder: (context, auth, provider, _) {
           return MaterialApp.router(
+            locale: provider.locale,
             theme: ThemeData(
               useMaterial3: true,
             ),

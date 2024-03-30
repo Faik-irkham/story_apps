@@ -5,6 +5,7 @@ import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/card_list.dart';
+import 'package:story_apps/widgets/flag_icon_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,11 +21,8 @@ class HomePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.flag),
-            onPressed: () {},
-          ),
+        actions: const [
+          FlagWidget(),
         ],
       ),
       body: AnnotatedRegion(
