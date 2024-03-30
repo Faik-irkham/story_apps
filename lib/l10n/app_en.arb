@@ -13,5 +13,8 @@
   "logoutTitle": "Logout",
   "logoutDeskripsiTitle": "Are you sure you want to logout?",
   "buttonCancle": "Cancle",
-  "buttonLogoutTitle": "Logout"
+  "buttonLogoutTitle": "Logout",
+  "homeNavLabel": "Home",
+  "uploadNavLabel": "Upload",
+  "profileNavLabel": "Profile"
 }

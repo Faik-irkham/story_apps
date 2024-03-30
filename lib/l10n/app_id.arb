@@ -13,5 +13,8 @@
   "logoutTitle": "Keluar",
   "logoutDeskripsiTitle": "Anda yakin ingin keluar?",
   "buttonCancle": "Batal",
-  "buttonLogoutTitle": "Keluar"
+  "buttonLogoutTitle": "Keluar",
+  "homeNavLabel": "Beranda",
+  "uploadNavLabel": "Unggah",
+  "profileNavLabel": "Profil"
 }
