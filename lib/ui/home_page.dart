@@ -71,7 +71,10 @@ class HomePage extends StatelessWidget {
                 child: Consumer<StoryProvider>(
                   builder: (context, provider, _) {
                     if (provider.state == ResultState.loading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ));
                     } else if (provider.state == ResultState.done) {
                       return ListView.builder(
                         shrinkWrap: true,
@@ -84,10 +87,10 @@ class HomePage extends StatelessWidget {
                         },
                       );
                     } else if (provider.state == ResultState.error) {
-                      return  Center(
+                      return Center(
                         child: Material(
-                          child: Text(
-                                AppLocalizations.of(context)!.noDataTitle),
+                          child:
+                              Text(AppLocalizations.of(context)!.noDataTitle),
                         ),
                       );
                     } else {
