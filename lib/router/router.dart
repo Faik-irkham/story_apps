@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:story_apps/common/bottom_navigation.dart';
 import 'package:story_apps/provider/credential_provider.dart';
+import 'package:story_apps/ui/add_story_page.dart';
 import 'package:story_apps/ui/detail_story_page.dart';
 import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/login_page.dart';
@@ -36,6 +37,11 @@ GoRouter router(BuildContext context) {
             path: 'home',
             name: 'homePage',
             builder: (context, state) => const HomePage(),
+          ),
+          GoRoute(
+            path: 'upload',
+            name: 'upload',
+            builder: (context, state) => const AddStoryPage(),
           ),
           GoRoute(
             path: ':id',
