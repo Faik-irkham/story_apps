@@ -198,6 +198,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
                             if (response.error == false && context.mounted) {
                               storyProvider.refresh();
+                              // context.goNamed('bottomNav');
                               context.goNamed('bottomNav');
                             }
                           } else {
@@ -209,14 +210,18 @@ class _AddStoryPageState extends State<AddStoryPage> {
                             );
                           }
                         },
-                        child: const Text(
-                          'Upload Story',
-                          style: TextStyle(
-                            color: Color(0XFF12111F),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        child: storyProvider.state == ResultState.loading
+                            ? const CircularProgressIndicator(
+                                color: Colors.black,
+                              )
+                            : const Text(
+                                'Upload Story',
+                                style: TextStyle(
+                                  color: Color(0XFF12111F),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                       );
                     },
                   )
