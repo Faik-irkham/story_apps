@@ -15,12 +15,22 @@ class DetailStoryPage extends StatefulWidget {
 }
 
 class _DetailStoryPageState extends State<DetailStoryPage> {
+  // @override
+  // void initState() {
+  //   StoryProvider story = Provider.of(context, listen: false);
+  //   story.detailStory(widget.id);
+  //   super.initState();
+  // }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.delayed(Duration.zero, () {
-      Provider.of<StoryProvider>(context, listen: false).detailStory(widget.id);
-    });
+    Future.delayed(
+      Duration.zero,
+      () {
+        Provider.of<StoryProvider>(context, listen: false)
+            .detailStory(widget.id);
+      },
+    );
   }
 
   @override
@@ -29,7 +39,7 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
       appBar: AppBar(
         backgroundColor: Colors.black38,
         centerTitle: true,
-        title:  Text(
+        title: Text(
           AppLocalizations.of(context)!.detailPostTitle,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
@@ -58,27 +68,26 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
                   ),
                 ),
                 child: Consumer<StoryProvider>(
-                  builder: (context, storyProvider, _) {
-                    switch (storyProvider.state) {
-                      case ResultState.loading:
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        );
-                      case ResultState.done:
-                        if (storyProvider.story != null) {
-                          return buildContent(context, storyProvider.story!);
-                        } else {
-                          return Center(
-                            child: Text(AppLocalizations.of(context)!.noDataTitle),
-                          );
-                        }
-                      case ResultState.error:
+                  builder: (context, provider, _) {
+                    if (provider.state == ResultState.loading) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                      );
+                    } else if (provider.state == ResultState.done) {
+                      if (provider.story != null) {
+                        return buildContent(context, provider.story!);
+                      } else {
                         return Center(
-                          child: Text(
-                              'Terjadi kesalahan: ${storyProvider.message}'),
+                          child:
+                              Text(AppLocalizations.of(context)!.noDataTitle),
                         );
+                      }
+                    } else {
+                      return Center(
+                        child: Text('Terjadi kesalahan: ${provider.message}'),
+                      );
                     }
                   },
                 ),
