@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:io';
 
@@ -54,7 +54,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
         );
       }
     } else {
-      // ignore: avoid_print
       print('No image selected.');
     }
   }
@@ -62,9 +61,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.delayed(Duration.zero, () {
-      Provider.of<StoryProvider>(context, listen: false);
-    });
+    Provider.of<StoryProvider>(context, listen: false);
   }
 
   @override

@@ -23,26 +23,8 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          Consumer<CredentialProvider>(builder: (context, auth, _) {
-            return IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () {
-                auth.deleteCredential();
-                context.goNamed('login');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Behasil Keluar!'),
-                  ),
-                );
-              },
-            );
-          }),
           IconButton(
             icon: const Icon(Icons.flag),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.add),
             onPressed: () {},
           ),
         ],
