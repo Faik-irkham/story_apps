@@ -60,9 +60,13 @@ class ApiService {
           'Authorization': 'Bearer $token',
         },
       );
-      return DetailStoryModel.fromJson(jsonDecode(response.body));
+      if (response.statusCode == 200) {
+        return DetailStoryModel.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to get detail story: ${response.statusCode}');
+      }
     } catch (e) {
-      throw Exception(e);
+      throw Exception('Failed to get detail story: $e');
     }
   }
 
