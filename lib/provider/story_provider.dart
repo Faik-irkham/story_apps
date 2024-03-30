@@ -60,10 +60,17 @@ class StoryProvider extends ChangeNotifier {
     try {
       _state = ResultState.loading;
       notifyListeners();
+
       final token = await preferences.getToken();
       final response = await apiService.getDetailStory(token, id);
-      if (response.error == false) _detailStory = response.story;
-      _state = ResultState.loading;
+
+      if (!response.error) {
+        _detailStory = response.story;
+        _state = ResultState.done; // Ubah status menjadi done saat berhasil
+      } else {
+        _state = ResultState.error;
+      }
+
       notifyListeners();
     } catch (e) {
       _state = ResultState.error;
