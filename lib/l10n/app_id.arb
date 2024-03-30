@@ -7,5 +7,11 @@
   "noDataTitle": "Tidak ada data",
   "uploadTitle": "Postingan Baru",
   "hintDescription": "Tulis keterangan",
-  "textAuthWarning": "Semua field wajib diisi"
+  "textAuthWarning": "Semua field wajib diisi",
+  "deskripsiUpload": "Deskripsi",
+  "uploadButtonTitle": "Unggah",
+  "logoutTitle": "Keluar",
+  "logoutDeskripsiTitle": "Anda yakin ingin keluar?",
+  "buttonCancle": "Batal",
+  "buttonLogoutTitle": "Keluar"
 }

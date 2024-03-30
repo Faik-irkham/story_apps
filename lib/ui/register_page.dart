@@ -67,9 +67,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        'Register',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.registerButton,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 40,
                           fontWeight: FontWeight.bold,

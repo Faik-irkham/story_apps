@@ -47,10 +47,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
             ),
-            routerConfig: router(context),
+            routerConfig: newRouter(context),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            
           );
         },
       ),

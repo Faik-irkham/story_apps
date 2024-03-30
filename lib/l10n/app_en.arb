@@ -7,5 +7,11 @@
   "noDataTitle": "No data",
   "uploadTitle": "New Post",
   "hintDescription": "Write a caption",
-  "textAuthWarning": "All fields are mandatory to fill in"
+  "textAuthWarning": "All fields are mandatory to fill in",
+  "deskripsiUpload": "Description",
+  "uploadButtonTitle": "Upload",
+  "logoutTitle": "Logout",
+  "logoutDeskripsiTitle": "Are you sure you want to logout?",
+  "buttonCancle": "Cancle",
+  "buttonLogoutTitle": "Logout"
 }

@@ -9,7 +9,7 @@ import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/login_page.dart';
 import 'package:story_apps/ui/register_page.dart';
 
-GoRouter router(BuildContext context) {
+GoRouter newRouter(BuildContext context) {
   CredentialProvider credential = Provider.of(context, listen: false);
   String initial = credential.token == null || credential.token?.isEmpty == true
       ? '/login'
@@ -53,7 +53,6 @@ GoRouter router(BuildContext context) {
       ),
     ],
     initialLocation: initial,
-    debugLogDiagnostics: true,
     routerNeglect: true,
   );
 }

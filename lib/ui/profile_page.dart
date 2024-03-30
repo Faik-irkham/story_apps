@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/widgets/button_widget.dart';
 
@@ -229,14 +230,14 @@ class ProfilePage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
+          title: Text(AppLocalizations.of(context)!.logoutTitle),
+          content: Text(AppLocalizations.of(context)!.logoutDeskripsiTitle),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.buttonCancle),
             ),
             CustomFilledButton(
               height: 40,
@@ -252,20 +253,13 @@ class ProfilePage extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text(
-                'Logout',
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.buttonLogoutTitle,
+                style: const TextStyle(
                   color: Colors.black,
                 ),
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     // Add logout logic here
-            //     Navigator.of(context).pop();
-            //   },
-            //   child: const Text('Logout'),
-            // ),
           ],
         );
       },

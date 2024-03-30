@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/utils/response_state.dart';
@@ -68,8 +69,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final credProvider =
-        Provider.of<CredentialProvider>(context, listen: false);
     return Scaffold(
       body: AnnotatedRegion(
         value: SystemUiOverlayStyle.light,
@@ -157,13 +156,14 @@ class _AddStoryPageState extends State<AddStoryPage> {
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: TextField(
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
-                        labelStyle: TextStyle(
+                      decoration: InputDecoration(
+                        labelText:
+                            AppLocalizations.of(context)!.deskripsiUpload,
+                        labelStyle: const TextStyle(
                           color: Colors.white,
                         ),
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
+                        border: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
                         ),
                       ),
@@ -172,28 +172,29 @@ class _AddStoryPageState extends State<AddStoryPage> {
                   ),
                   const SizedBox(height: 20),
                   Consumer<StoryProvider>(
-                    builder: (context, storyProvider, _) {
-                      return CustomFilledButton(
-                        onPressed: () async {
-                          if (_descriptionController.text.isNotEmpty &&
-                              _imageFile != null) {
-                            if (storyProvider.state == ResultState.error &&
-                                context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Error occurred.'),
-                                ),
-                              );
-                            } else {
-                              // Tambahkan penanganan tombol di sini
-                              if (storyProvider.state != ResultState.loading) {
-                                final description = _descriptionController.text;
-                                final token =
-                                    await credProvider.preferences.getToken();
+                    builder: (context, provider, _) {
+                      return Consumer<CredentialProvider>(
+                        builder: (context, cred, _) {
+                          return CustomFilledButton(
+                            onPressed: () async {
+                              final description = _descriptionController.text;
+                              final imageFile = _imageFile;
 
-                                final response = await storyProvider.postStory(
+                              if (description.isNotEmpty && imageFile != null) {
+                                if (provider.state == ResultState.loading) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Please wait, uploading in progress...'),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                final token = await cred.preferences.getToken();
+                                final response = await provider.postStory(
                                   description: description,
-                                  imagePath: _imageFile!.path,
+                                  imagePath: imageFile.path,
                                   token: token,
                                   lat: null,
                                   lon: null,
@@ -201,38 +202,39 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
                                 if (response.error == false &&
                                     context.mounted) {
-                                  storyProvider.refresh();
+                                  provider.refresh();
                                   context.goNamed('bottomNav');
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Failed to upload story.'),
+                                      content: Text(
+                                          'Failed to upload story. Please try again.'),
                                     ),
                                   );
                                 }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Please provide description and image.'),
+                                  ),
+                                );
                               }
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Please provide description and image.'),
-                              ),
-                            );
-                          }
+                            },
+                            child: provider.state == ResultState.loading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.black)
+                                : Text(
+                                    AppLocalizations.of(context)!
+                                        .uploadButtonTitle,
+                                    style: const TextStyle(
+                                      color: Color(0XFF12111F),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                          );
                         },
-                        child: storyProvider.state == ResultState.loading
-                            ? const CircularProgressIndicator(
-                                color: Colors.black,
-                              )
-                            : const Text(
-                                'Upload Story',
-                                style: TextStyle(
-                                  color: Color(0XFF12111F),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
                       );
                     },
                   ),
