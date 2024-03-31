@@ -235,7 +235,7 @@ class ProfilePage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                GoRouter.of(context).pop();
               },
               child: Text(AppLocalizations.of(context)!.buttonCancle),
             ),

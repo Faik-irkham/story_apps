@@ -45,7 +45,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  GoRouter.of(context).pop();
                 },
                 child: const Text('OK'),
               ),
@@ -105,7 +105,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
                                   title: const Text('Choose from Gallery'),
                                   onTap: () {
                                     getImage(ImageSource.gallery);
-                                    Navigator.pop(context);
+                                    GoRouter.of(context).pop();
                                   },
                                 ),
                                 ListTile(
@@ -113,7 +113,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
                                   title: const Text('Take a Picture'),
                                   onTap: () {
                                     getImage(ImageSource.camera);
-                                    Navigator.pop(context);
+                                    GoRouter.of(context).pop();
                                   },
                                 ),
                               ],
