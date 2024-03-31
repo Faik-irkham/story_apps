@@ -168,70 +168,66 @@ class _AddStoryPageState extends State<AddStoryPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Consumer<StoryProvider>(
-                    builder: (context, provider, _) {
-                      return Consumer<CredentialProvider>(
-                        builder: (context, cred, _) {
-                          return CustomFilledButton(
-                            onPressed: () async {
-                              final description = _descriptionController.text;
-                              final imageFile = _imageFile;
+                  Consumer2<StoryProvider, CredentialProvider>(
+                    builder: (context, provider, cred, _) {
+                      return CustomFilledButton(
+                        onPressed: () async {
+                          final description = _descriptionController.text;
+                          final imageFile = _imageFile;
 
-                              if (description.isNotEmpty && imageFile != null) {
-                                if (provider.state == ResultState.loading) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Please wait, uploading in progress...'),
-                                    ),
-                                  );
-                                  return;
-                                }
+                          if (description.isNotEmpty && imageFile != null) {
+                            if (provider.state == ResultState.loading) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Please wait, uploading in progress...'),
+                                ),
+                              );
+                              return;
+                            }
 
-                                final token = await cred.preferences.getToken();
-                                final response = await provider.postStory(
-                                  description: description,
-                                  imagePath: imageFile.path,
-                                  token: token,
-                                  lat: null,
-                                  lon: null,
-                                );
+                            final token = await cred.preferences.getToken();
+                            final response = await provider.postStory(
+                              description: description,
+                              imagePath: imageFile.path,
+                              token: token,
+                              lat: null,
+                              lon: null,
+                            );
 
-                                if (response.error == false &&
-                                    context.mounted) {
-                                  provider.refresh();
-                                  context.goNamed('bottomNav');
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Failed to upload story. Please try again.'),
-                                    ),
-                                  );
-                                }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Please provide description and image.'),
-                                  ),
-                                );
-                              }
-                            },
-                            child: provider.state == ResultState.loading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.black)
-                                : Text(
-                                    AppLocalizations.of(context)!
-                                        .uploadButtonTitle,
-                                    style: const TextStyle(
-                                      color: Color(0XFF12111F),
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                          );
+                            if (provider.state == ResultState.done &&
+                                response.error == false &&
+                                context.mounted) {
+                              provider.refresh();
+                              context.goNamed('bottomNav');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Failed to upload story. Please try again.'),
+                                ),
+                              );
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please provide description and image.'),
+                              ),
+                            );
+                          }
                         },
+                        child: provider.state == ResultState.loading
+                            ? const CircularProgressIndicator(
+                                color: Colors.black)
+                            : Text(
+                                AppLocalizations.of(context)!.uploadButtonTitle,
+                                style: const TextStyle(
+                                  color: Color(0XFF12111F),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                       );
                     },
                   ),
