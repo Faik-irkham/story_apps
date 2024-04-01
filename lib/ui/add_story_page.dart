@@ -198,8 +198,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
                             if (provider.state == ResultState.done &&
                                 response.error == false &&
                                 context.mounted) {
+                              provider.fetchAllStory();
                               provider.refresh();
-                              context.goNamed('bottomNav');
+                              context.goNamed('bottomNoav');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
