@@ -38,10 +38,11 @@ class ApiService {
     }
   }
 
-  Future<StoryModel> getAllStories(String token) async {
+  Future<StoryModel> getAllStories(String token,
+      [int page = 1, int size = 10]) async {
     try {
       final response = await http.get(
-        Uri.parse('$_baseUrl/stories'),
+        Uri.parse('$_baseUrl/stories?page=$page&size=$size'),
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -82,7 +83,7 @@ class ApiService {
         'POST',
         Uri.parse('$_baseUrl/stories'),
       );
-      
+
       request.fields['description'] = description;
       if (lat != null) request.fields['lat'] = lat.toString();
       if (lon != null) request.fields['lon'] = lon.toString();

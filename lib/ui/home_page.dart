@@ -1,14 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/card_list.dart';
 import 'package:story_apps/widgets/flag_icon_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    final apiProvider = context.read<StoryProvider>();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent) {
+        if (apiProvider.pageItems != null) {
+          apiProvider.getAllStory();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,35 +73,36 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 child: Consumer<StoryProvider>(
-                  builder: (context, provider, _) {
-                    if (provider.state == ResultState.loading) {
+                  builder: (context, provider, child) {
+                    if (provider.state == ResultState.loading &&
+                        provider.pageItems == 1) {
                       return const Center(
-                          child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ));
-                    } else if (provider.state == ResultState.done) {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: provider.result.listStory.length,
-                        itemBuilder: (context, index) {
-                          var stories = provider.result.listStory[index];
-                          return CardListStory(
-                            stories: stories,
-                          );
-                        },
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
                       );
                     } else if (provider.state == ResultState.error) {
                       return Center(
-                        child: Material(
-                          child:
-                              Text(AppLocalizations.of(context)!.noDataTitle),
-                        ),
+                        child: Text(provider.message),
                       );
                     } else {
-                      return const Center(
-                        child: Material(
-                          child: Text('Error: state null'),
-                        ),
+                      final listStory = provider.allStory;
+                      return ListView.builder(
+                        controller: scrollController,
+                        shrinkWrap: true,
+                        itemCount: listStory.length +
+                            (provider.pageItems != null ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == listStory.length &&
+                              provider.pageItems != null) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return CardListStory(
+                            stories: listStory[index],
+                          );
+                        },
                       );
                     }
                   },

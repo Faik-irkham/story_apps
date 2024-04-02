@@ -26,4 +26,14 @@ class Story {
         lat: json["lat"]?.toDouble(),
         lon: json["lon"]?.toDouble(),
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "description": description,
+        "photoUrl": photoUrl,
+        "createdAt": createdAt.toIso8601String(),
+        "lat": lat,
+        "lon": lon,
+      };
 }

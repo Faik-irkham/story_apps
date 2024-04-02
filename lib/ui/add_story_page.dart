@@ -198,7 +198,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
                             if (provider.state == ResultState.done &&
                                 response.error == false &&
                                 context.mounted) {
-                              provider.fetchAllStory();
+                              provider.getAllStory();
                               provider.refresh();
                               context.goNamed('bottomNav');
                             } else {

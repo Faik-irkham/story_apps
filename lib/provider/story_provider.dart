@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:story_apps/data/api/api_service.dart';
 import 'package:story_apps/data/model/detail_story_model.dart';
-import 'package:story_apps/data/model/story_model.dart';
+import 'package:story_apps/data/model/list_story_model.dart';
 import 'package:story_apps/data/model/upload_response.dart';
 import 'package:story_apps/data/preference/auth_preference.dart';
 import 'package:story_apps/utils/response_state.dart';
@@ -13,36 +13,41 @@ class StoryProvider extends ChangeNotifier {
   final AuthPreference preferences;
 
   StoryProvider({required this.apiService, required this.preferences}) {
-    fetchAllStory();
+    getAllStory();
   }
 
-  late StoryModel _storiesResult;
+  List<ListStoryModel> allStory = [];
+  List<ListStoryModel>? _listStory;
   Story? _detailStory;
   late ResultState _state;
   String _message = '';
 
   String get message => _message;
-
-  StoryModel get result => _storiesResult;
+  List<ListStoryModel>? get listStory => _listStory;
   Story? get story => _detailStory;
 
   ResultState get state => _state;
+  int? pageItems = 1;
+  int sizeItems = 10;
 
-  Future<dynamic> fetchAllStory() async {
+  Future<dynamic> getAllStory() async {
     try {
       _state = ResultState.loading;
       notifyListeners();
       final token = await preferences.getToken();
-      final story = await apiService.getAllStories(token);
-      if (story.listStory.isEmpty) {
-        _state = ResultState.error;
-        notifyListeners();
-        return _message = 'Empty Data';
-      } else {
-        _state = ResultState.done;
-        notifyListeners();
-        return _storiesResult = story;
+      final response =
+          await apiService.getAllStories(token, pageItems!, sizeItems);
+      if (response.error == false) {
+        List<ListStoryModel> data = response.listStory;
+        allStory.addAll(data);
+        if (data.length < sizeItems) {
+          pageItems = null;
+        } else {
+          pageItems = pageItems! + 1;
+        }
       }
+      _state = ResultState.done;
+      notifyListeners();
     } catch (e) {
       if (e is SocketException) {
         _state = ResultState.error;
@@ -110,7 +115,7 @@ class StoryProvider extends ChangeNotifier {
     try {
       _state = ResultState.loading;
       notifyListeners();
-      await fetchAllStory();
+      await getAllStory();
       _state = ResultState.done;
       notifyListeners();
     } catch (e) {
