@@ -114,6 +114,8 @@ class StoryProvider extends ChangeNotifier {
     try {
       _state = ResultState.loading;
       notifyListeners();
+      pageItems = 1;
+      allStory = [];
       await getAllStory();
       _state = ResultState.done;
       notifyListeners();
