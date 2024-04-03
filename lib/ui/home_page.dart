@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/card_list.dart';
+import 'package:story_apps/widgets/custom_painter.dart';
 import 'package:story_apps/widgets/flag_icon_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -96,11 +97,16 @@ class _HomePageState extends State<HomePage> {
                           if (index == listStory.length &&
                               provider.pageItems != null) {
                             return const Center(
-                              child: CircularProgressIndicator(),
+                              child: CustomLoadingIndicator(),
                             );
                           }
-                          return CardListStory(
-                            stories: listStory[index],
+                          double opacity =
+                              index == listStory.length - 1 ? 0.5 : 1.0;
+                          return Opacity(
+                            opacity: opacity,
+                            child: CardListStory(
+                              stories: listStory[index],
+                            ),
                           );
                         },
                       );
