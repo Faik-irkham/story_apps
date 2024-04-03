@@ -7,6 +7,7 @@ import 'package:story_apps/data/preference/auth_preference.dart';
 import 'package:story_apps/provider/auth_provider.dart';
 import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/provider/localizations_provider.dart';
+import 'package:story_apps/provider/location_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/router/router.dart';
 
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LocalizationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LocationProvider(),
         ),
       ],
       child: Consumer2<CredentialProvider, LocalizationProvider>(

@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:story_apps/build_variant/flavor_config.dart';
 import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/credential_provider.dart';
+import 'package:story_apps/provider/location_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
-import 'package:story_apps/ui/pick_map_page.dart';
 import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/button_widget.dart';
 
@@ -23,11 +23,8 @@ class AddStoryPage extends StatefulWidget {
 }
 
 class _AddStoryPageState extends State<AddStoryPage> {
-  File? _imageFile;
   final picker = ImagePicker();
   final TextEditingController _descriptionController = TextEditingController();
-  double? _selectedLat;
-  double? _selectedLon;
 
   Future getImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
@@ -37,9 +34,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
       int fileSizeInBytes = imageFile.lengthSync();
       double fileSizeInMb = fileSizeInBytes / (1024 * 1024);
       if (fileSizeInMb <= 2) {
-        setState(() {
-          _imageFile = imageFile;
-        });
+        Provider.of<LocationProvider>(context, listen: false).setImageFile(
+            imageFile); // Mengatur gambar menggunakan LocationProvider
       } else {
         showDialog(
           context: context,
@@ -66,18 +62,19 @@ class _AddStoryPageState extends State<AddStoryPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Provider.of<StoryProvider>(context, listen: false);
-  }
-
-  void _selectLocation(double lat, double lon) {
-    setState(() {
-      _selectedLat = lat;
-      _selectedLon = lon;
-    });
+    Provider.of<LocationProvider>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black38,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => context.pop(),
+        ),
+      ),
       body: AnnotatedRegion(
         value: SystemUiOverlayStyle.light,
         child: Stack(
@@ -133,31 +130,34 @@ class _AddStoryPageState extends State<AddStoryPage> {
                         },
                       );
                     },
-                    child: _imageFile == null
-                        ? Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.grey[300],
-                            ),
-                            child: const Icon(
-                              Icons.image,
-                              size: 100,
-                              color: Colors.grey,
-                            ),
-                          )
-                        : Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: FileImage(_imageFile!),
-                                fit: BoxFit.cover,
+                    child:
+                        Provider.of<LocationProvider>(context).imageFile == null
+                            ? Container(
+                                width: double.infinity,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.grey[300],
+                                ),
+                                child: const Icon(
+                                  Icons.image,
+                                  size: 100,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            : Container(
+                                width: double.infinity,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                        Provider.of<LocationProvider>(context)
+                                            .imageFile!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -183,37 +183,34 @@ class _AddStoryPageState extends State<AddStoryPage> {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TextButton(
-                              onPressed: () async {
-                                final result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const PickMapPage(),
-                                    ));
-                                if (result != null &&
-                                    result is Map<String, dynamic>) {
-                                  _selectLocation(
-                                      result['lat']!, result['lon']!);
-                                }
+                            Consumer<LocationProvider>(
+                              builder: (context, locationProvider, _) {
+                                return TextButton(
+                                  onPressed: () {
+                                    context.goNamed('map_pick');
+                                  },
+                                  child: Text(
+                                    locationProvider.selectedLat == null ||
+                                            locationProvider.selectedLon == null
+                                        ? 'Add Location'
+                                        : 'Location Added',
+                                    style: TextStyle(
+                                      color: locationProvider.selectedLat ==
+                                                  null ||
+                                              locationProvider.selectedLon ==
+                                                  null
+                                          ? Colors.white
+                                          : Colors.green,
+                                    ),
+                                  ),
+                                );
                               },
-                              child: Text(
-                                _selectedLat == null || _selectedLon == null
-                                    ? 'Add Location'
-                                    : 'Location Added',
-                                style: TextStyle(
-                                  color: _selectedLat == null ||
-                                          _selectedLon == null
-                                      ? Colors.white
-                                      : Colors.green,
-                                ),
-                              ),
                             ),
                             IconButton(
                               onPressed: () {
-                                setState(() {
-                                  _selectedLat = null;
-                                  _selectedLon = null;
-                                });
+                                Provider.of<LocationProvider>(context,
+                                        listen: false)
+                                    .deleteLocation();
                               },
                               icon: const Icon(Icons.clear),
                               color: Colors.white,
@@ -221,23 +218,34 @@ class _AddStoryPageState extends State<AddStoryPage> {
                           ],
                         )
                       : const SizedBox(),
-                  if (_selectedLat != null && _selectedLon != null)
+                  if (Provider.of<LocationProvider>(context).selectedLat !=
+                          null &&
+                      Provider.of<LocationProvider>(context).selectedLon !=
+                          null)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        'Selected Location: $_selectedLat, $_selectedLon',
+                        'Selected Location: ${Provider.of<LocationProvider>(context).selectedLat}, ${Provider.of<LocationProvider>(context).selectedLon}',
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   const SizedBox(height: 20),
-                  Consumer2<StoryProvider, CredentialProvider>(
-                    builder: (context, provider, cred, _) {
+                  Consumer3<StoryProvider, CredentialProvider,
+                      LocationProvider>(
+                    builder: (context, provider, cred, loc, _) {
                       return CustomFilledButton(
                         onPressed: () async {
                           final description = _descriptionController.text;
-                          final imageFile = _imageFile;
+                          final imageFile = loc
+                              .imageFile; // Mengambil gambar dari LocationProvider
+                          final selectedLat = loc.selectedLat;
+                          final selectedLon = loc.selectedLon;
 
-                          if (description.isNotEmpty && imageFile != null) {
+                          if (description.isNotEmpty &&
+                              imageFile != null &&
+                              selectedLat != null &&
+                              selectedLon != null) {
+                            // Memeriksa apakah semua informasi sudah ada
                             if (provider.state == ResultState.loading) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -253,8 +261,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
                               description: description,
                               imagePath: imageFile.path,
                               token: token,
-                              lat: _selectedLat,
-                              lon: _selectedLon,
+                              lat: selectedLat,
+                              lon: selectedLon,
                             );
 
                             if (provider.state == ResultState.done &&
@@ -275,7 +283,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
-                                    'Please provide description and image.'),
+                                  'Please provide description, image, and location.',
+                                ),
                               ),
                             );
                           }

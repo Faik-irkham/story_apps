@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+import 'package:story_apps/provider/location_provider.dart';
 
 class PickMapPage extends StatefulWidget {
   const PickMapPage({Key? key}) : super(key: key);
@@ -153,7 +156,10 @@ class _PickMapPageState extends State<PickMapPage> {
       CameraUpdate.newLatLng(latLng),
     );
 
-    Navigator.pop(context, {'lat': latLng.latitude, 'lon': latLng.longitude});
+    Provider.of<LocationProvider>(context, listen: false)
+        .setLocation(latLng.latitude, latLng.longitude);
+
+    GoRouter.of(context).pop();
   }
 
   void defineMarker(LatLng latLng, String street, String address) {

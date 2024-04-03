@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:story_apps/common/common.dart';
-import 'package:story_apps/ui/add_story_page.dart';
 import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/profile_page.dart';
 
@@ -16,7 +16,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
 
   final List<Widget> _listPage = [
     const HomePage(),
-    const AddStoryPage(),
+    const Placeholder(),
     const ProfilePage(),
   ];
 
@@ -51,9 +51,13 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         ),
         selectedItemColor: Colors.black,
         onTap: (value) {
-          setState(() {
-            _bottomNavIndex = value;
-          });
+          if (value == 1) {
+            context.goNamed('upload');
+          } else if (value == 0 || value == 2) {
+            setState(() {
+              _bottomNavIndex = value;
+            });
+          }
         },
         type: BottomNavigationBarType.fixed,
       ),
