@@ -1,5 +1,7 @@
-import 'package:story_apps/data/model/login_result_model.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'sign_in_model.g.dart';
 
+@JsonSerializable()
 class SignInModel {
   bool error;
   String message;
@@ -11,13 +13,22 @@ class SignInModel {
     required this.loginResult,
   });
 
-  factory SignInModel.fromJson(Map<String, dynamic> json) {
-    return SignInModel(
-      error: json["error"],
-      message: json["message"],
-      loginResult: json["loginResult"] != null
-          ? LoginResult.fromJson(json["loginResult"])
-          : LoginResult(userId: '', name: '', token: ''),
-    );
-  }
+  factory SignInModel.fromJson(Map<String, dynamic> json) =>
+      _$SignInModelFromJson(json);
+}
+
+@JsonSerializable()
+class LoginResult {
+  String userId;
+  String name;
+  String token;
+
+  LoginResult({
+    required this.userId,
+    required this.name,
+    required this.token,
+  });
+
+  factory LoginResult.fromJson(Map<String, dynamic> json) =>
+      _$LoginResultFromJson(json);
 }
