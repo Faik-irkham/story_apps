@@ -15,12 +15,6 @@ ResponseStory _$ResponseStoryFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$ResponseStoryToJson(ResponseStory instance) =>
-    <String, dynamic>{
-      'error': instance.error,
-      'message': instance.message,
-      'listStory': instance.listStory,
-    };
 
 Story _$StoryFromJson(Map<String, dynamic> json) => Story(
       id: json['id'] as String,
@@ -51,9 +45,3 @@ DetailResponse _$DetailResponseFromJson(Map<String, dynamic> json) =>
           : Story.fromJson(json['story'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$DetailResponseToJson(DetailResponse instance) =>
-    <String, dynamic>{
-      'error': instance.error,
-      'message': instance.message,
-      'story': instance.story,
-    };

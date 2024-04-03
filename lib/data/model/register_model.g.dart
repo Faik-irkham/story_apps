@@ -12,8 +12,3 @@ RegisterModel _$RegisterModelFromJson(Map<String, dynamic> json) =>
       message: json['message'] as String,
     );
 
-Map<String, dynamic> _$RegisterModelToJson(RegisterModel instance) =>
-    <String, dynamic>{
-      'error': instance.error,
-      'message': instance.message,
-    };
