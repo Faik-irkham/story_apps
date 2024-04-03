@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/build_variant/flavor_config.dart';
 import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
@@ -178,45 +179,48 @@ class _AddStoryPageState extends State<AddStoryPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () async {
-                          final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PickMapPage(),
-                              ));
-                          if (result != null &&
-                              result is Map<String, dynamic>) {
-                            _selectLocation(result['lat']!, result['lon']!);
-                          }
-                        },
-                        child: Text(
-                          _selectedLat == null || _selectedLon == null
-                              ? 'Add Location'
-                              : 'Location Added',
-                          style: TextStyle(
-                            color: _selectedLat == null || _selectedLon == null
-                                ? Colors.white
-                                : Colors.green,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          // Clear selected location
-                          setState(() {
-                            _selectedLat = null;
-                            _selectedLon = null;
-                          });
-                        },
-                        icon: const Icon(Icons.clear),
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
+                  FlavorConfig.instance.flavor == FlavorType.paid
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () async {
+                                final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const PickMapPage(),
+                                    ));
+                                if (result != null &&
+                                    result is Map<String, dynamic>) {
+                                  _selectLocation(
+                                      result['lat']!, result['lon']!);
+                                }
+                              },
+                              child: Text(
+                                _selectedLat == null || _selectedLon == null
+                                    ? 'Add Location'
+                                    : 'Location Added',
+                                style: TextStyle(
+                                  color: _selectedLat == null ||
+                                          _selectedLon == null
+                                      ? Colors.white
+                                      : Colors.green,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _selectedLat = null;
+                                  _selectedLon = null;
+                                });
+                              },
+                              icon: const Icon(Icons.clear),
+                              color: Colors.white,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   if (_selectedLat != null && _selectedLon != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
