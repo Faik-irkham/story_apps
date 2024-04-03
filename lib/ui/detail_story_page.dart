@@ -15,12 +15,6 @@ class DetailStoryPage extends StatefulWidget {
 }
 
 class _DetailStoryPageState extends State<DetailStoryPage> {
-  // @override
-  // void initState() {
-  //   StoryProvider story = Provider.of(context, listen: false);
-  //   story.detailStory(widget.id);
-  //   super.initState();
-  // }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
