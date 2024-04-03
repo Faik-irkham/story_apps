@@ -7,6 +7,7 @@ import 'package:story_apps/ui/add_story_page.dart';
 import 'package:story_apps/ui/detail_story_page.dart';
 import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/login_page.dart';
+import 'package:story_apps/ui/pick_map_page.dart';
 import 'package:story_apps/ui/register_page.dart';
 
 GoRouter newRouter(BuildContext context) {
@@ -42,6 +43,13 @@ GoRouter newRouter(BuildContext context) {
             path: 'upload',
             name: 'upload',
             builder: (context, state) => const AddStoryPage(),
+            routes: [
+              GoRoute(
+                path: 'pick',
+                name: 'map_pick',
+                builder: (context, state) => const PickMapPage(),
+              ),
+            ],
           ),
           GoRoute(
             path: ':id',

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/provider/story_provider.dart';
+import 'package:story_apps/ui/pick_map_page.dart';
 import 'package:story_apps/utils/response_state.dart';
 import 'package:story_apps/widgets/button_widget.dart';
 
@@ -24,6 +25,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
   File? _imageFile;
   final picker = ImagePicker();
   final TextEditingController _descriptionController = TextEditingController();
+  double? _selectedLat;
+  double? _selectedLon;
 
   Future getImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
@@ -62,6 +65,13 @@ class _AddStoryPageState extends State<AddStoryPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Provider.of<StoryProvider>(context, listen: false);
+  }
+
+  void _selectLocation(double lat, double lon) {
+    setState(() {
+      _selectedLat = lat;
+      _selectedLon = lon;
+    });
   }
 
   @override
@@ -168,6 +178,100 @@ class _AddStoryPageState extends State<AddStoryPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     TextButton(
+                  //       onPressed: () async {
+                  //         final result = await Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) => PickMapPage(),
+                  //             ));
+                  //         if (result != null && result is Map<String, double>) {
+                  //           _selectLocation(result['lat']!, result['lon']!);
+                  //         }
+                  //       },
+                  //       // onPressed: () async {
+                  //       //   print('add lokasi');
+                  //       //   context.goNamed('map_pick');
+                  //       //   // Implement location selection
+                  //       //   // Set _lat and _lon with selected location
+                  //       //   // This can be done using a map or search feature
+                  //       // },
+                  //       child: Text(
+                  //         _lat == null || _lon == null
+                  //             ? 'Add Location'
+                  //             : 'Location Added',
+                  //         style: TextStyle(
+                  //           color: _lat == null || _lon == null
+                  //               ? Colors.white
+                  //               : Colors.green,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         // Clear selected location
+                  //         setState(() {
+                  //           _lat = null;
+                  //           _lon = null;
+                  //         });
+                  //       },
+                  //       icon: Icon(Icons.clear),
+                  //       color: Colors.white,
+                  //     ),
+                  //   ],
+                  // ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PickMapPage(),
+                              ));
+                          if (result != null &&
+                              result is Map<String, dynamic>) {
+                            _selectLocation(result['lat']!, result['lon']!);
+                          }
+                        },
+                        child: Text(
+                          _selectedLat == null || _selectedLon == null
+                              ? 'Add Location'
+                              : 'Location Added',
+                          style: TextStyle(
+                            color: _selectedLat == null || _selectedLon == null
+                                ? Colors.white
+                                : Colors.green,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          // Clear selected location
+                          setState(() {
+                            _selectedLat = null;
+                            _selectedLon = null;
+                          });
+                        },
+                        icon: const Icon(Icons.clear),
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                  if (_selectedLat != null && _selectedLon != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        'Selected Location: $_selectedLat, $_selectedLon',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  const SizedBox(height: 20),
                   Consumer2<StoryProvider, CredentialProvider>(
                     builder: (context, provider, cred, _) {
                       return CustomFilledButton(
@@ -191,8 +295,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
                               description: description,
                               imagePath: imageFile.path,
                               token: token,
-                              lat: null,
-                              lon: null,
+                              lat: _selectedLat,
+                              lon: _selectedLon,
                             );
 
                             if (provider.state == ResultState.done &&
