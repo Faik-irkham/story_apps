@@ -178,52 +178,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     TextButton(
-                  //       onPressed: () async {
-                  //         final result = await Navigator.push(
-                  //             context,
-                  //             MaterialPageRoute(
-                  //               builder: (context) => PickMapPage(),
-                  //             ));
-                  //         if (result != null && result is Map<String, double>) {
-                  //           _selectLocation(result['lat']!, result['lon']!);
-                  //         }
-                  //       },
-                  //       // onPressed: () async {
-                  //       //   print('add lokasi');
-                  //       //   context.goNamed('map_pick');
-                  //       //   // Implement location selection
-                  //       //   // Set _lat and _lon with selected location
-                  //       //   // This can be done using a map or search feature
-                  //       // },
-                  //       child: Text(
-                  //         _lat == null || _lon == null
-                  //             ? 'Add Location'
-                  //             : 'Location Added',
-                  //         style: TextStyle(
-                  //           color: _lat == null || _lon == null
-                  //               ? Colors.white
-                  //               : Colors.green,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     IconButton(
-                  //       onPressed: () {
-                  //         // Clear selected location
-                  //         setState(() {
-                  //           _lat = null;
-                  //           _lon = null;
-                  //         });
-                  //       },
-                  //       icon: Icon(Icons.clear),
-                  //       color: Colors.white,
-                  //     ),
-                  //   ],
-                  // ),
-                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
