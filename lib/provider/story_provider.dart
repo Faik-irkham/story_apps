@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:story_apps/data/api/api_service.dart';
-import 'package:story_apps/data/model/detail_story_model.dart';
-import 'package:story_apps/data/model/list_story_model.dart';
+import 'package:story_apps/data/model/response_story_model.dart';
 import 'package:story_apps/data/model/upload_response.dart';
 import 'package:story_apps/data/preference/auth_preference.dart';
 import 'package:story_apps/utils/response_state.dart';
@@ -16,14 +15,14 @@ class StoryProvider extends ChangeNotifier {
     getAllStory();
   }
 
-  List<ListStoryModel> allStory = [];
-  List<ListStoryModel>? _listStory;
+  List<Story> allStory = [];
+  List<Story>? _listStory;
   Story? _detailStory;
   late ResultState _state;
   String _message = '';
 
   String get message => _message;
-  List<ListStoryModel>? get listStory => _listStory;
+  List<Story>? get listStory => _listStory;
   Story? get story => _detailStory;
 
   ResultState get state => _state;
@@ -38,7 +37,7 @@ class StoryProvider extends ChangeNotifier {
       final response =
           await apiService.getAllStories(token, pageItems!, sizeItems);
       if (response.error == false) {
-        List<ListStoryModel> data = response.listStory;
+        List<Story> data = response.listStory!;
         allStory.addAll(data);
         if (data.length < sizeItems) {
           pageItems = null;

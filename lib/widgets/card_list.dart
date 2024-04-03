@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:story_apps/data/model/list_story_model.dart';
+import 'package:story_apps/data/model/response_story_model.dart';
 
 class CardListStory extends StatelessWidget {
-  final ListStoryModel stories;
+  final Story stories;
   const CardListStory({
     super.key,
     required this.stories,
@@ -15,7 +15,7 @@ class CardListStory extends StatelessWidget {
       onTap: () {
         context.goNamed(
           'detail',
-          pathParameters: {'id': stories.id!},
+          pathParameters: {'id': stories.id},
         );
       },
       child: Card(
@@ -33,7 +33,7 @@ class CardListStory extends StatelessWidget {
                   topRight: Radius.circular(15.0),
                 ),
                 image: DecorationImage(
-                  image: NetworkImage(stories.photoUrl!),
+                  image: NetworkImage(stories.photoUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -48,13 +48,13 @@ class CardListStory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    stories.name!,
+                    stories.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    '${stories.description!.split(' ').take(10).join(' ')}...',
+                    '${stories.description.split(' ').take(10).join(' ')}...',
                   ),
                 ],
               ),

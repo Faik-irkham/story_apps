@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:story_apps/data/model/register_model.dart';
-import 'package:story_apps/data/model/response_detail.dart';
+import 'package:story_apps/data/model/response_story_model.dart';
 import 'package:story_apps/data/model/sign_in_model.dart';
 import 'package:story_apps/data/model/sign_up_form_model.dart';
-import 'package:story_apps/data/model/story_model.dart';
 import 'package:story_apps/data/model/upload_response.dart';
 
 class ApiService {
@@ -38,7 +37,7 @@ class ApiService {
     }
   }
 
-  Future<StoryModel> getAllStories(String token,
+  Future<ResponseStory> getAllStories(String token,
       [int page = 1, int size = 10]) async {
     try {
       final response = await http.get(
@@ -47,13 +46,13 @@ class ApiService {
           'Authorization': 'Bearer $token',
         },
       );
-      return StoryModel.fromJson(jsonDecode(response.body));
+      return ResponseStory.fromJson(jsonDecode(response.body));
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<DetailStoryModel> getDetailStory(String token, String id) async {
+  Future<DetailResponse> getDetailStory(String token, String id) async {
     try {
       final response = await http.get(
         Uri.parse('$_baseUrl/stories/$id'),
@@ -62,7 +61,7 @@ class ApiService {
         },
       );
       if (response.statusCode == 200) {
-        return DetailStoryModel.fromJson(jsonDecode(response.body));
+        return DetailResponse.fromJson(jsonDecode(response.body));
       } else {
         throw Exception('Failed to get detail story: ${response.statusCode}');
       }
