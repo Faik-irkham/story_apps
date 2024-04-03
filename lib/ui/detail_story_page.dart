@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:story_apps/common/common.dart';
 import 'package:story_apps/data/model/response_story_model.dart';
 import 'package:story_apps/provider/story_provider.dart';
+import 'package:story_apps/ui/map_page.dart';
 import 'package:story_apps/utils/response_state.dart';
 
 class DetailStoryPage extends StatefulWidget {
@@ -129,6 +130,20 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
               color: Colors.white,
             ),
           ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (story.lat != null && story.lon != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MapPage(lat: story.lat!, lon: story.lon!),
+                ),
+              );
+            }
+          },
+          child: const Text('Lihat di Peta'),
         ),
       ],
     );
