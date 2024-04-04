@@ -26,8 +26,7 @@ class _LoadingIndicatorPainter extends CustomPainter {
 
     const double offset = 10;
     const double indicatorLength = 8;
-
-    // Calculate the current rotation angle
+    
     final double rotationAngle =
         2 * math.pi * DateTime.now().millisecond / 1000;
 

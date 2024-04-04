@@ -7,6 +7,7 @@ import 'package:story_apps/ui/add_story_page.dart';
 import 'package:story_apps/ui/detail_story_page.dart';
 import 'package:story_apps/ui/home_page.dart';
 import 'package:story_apps/ui/login_page.dart';
+import 'package:story_apps/ui/map_page.dart';
 import 'package:story_apps/ui/pick_map_page.dart';
 import 'package:story_apps/ui/register_page.dart';
 
@@ -52,11 +53,21 @@ GoRouter newRouter(BuildContext context) {
             ],
           ),
           GoRoute(
-            path: ':id',
-            name: 'detail',
-            builder: (context, state) =>
-                DetailStoryPage(id: state.pathParameters['id']!),
-          )
+              path: ':id',
+              name: 'detail',
+              builder: (context, state) =>
+                  DetailStoryPage(id: state.pathParameters['id']!),
+              routes: [
+                GoRoute(
+                  path: 'map/:lat/:lon',
+                  name: 'map',
+                  builder: (context, state) => MapPage(
+                    id: state.pathParameters['id']!,
+                    lat: state.pathParameters['lat']!,
+                    lon: state.pathParameters['lon']!,
+                  ),
+                ),
+              ])
         ],
       ),
     ],

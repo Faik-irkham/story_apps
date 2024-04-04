@@ -13,8 +13,10 @@ SignInModel _$SignInModelFromJson(Map<String, dynamic> json) => SignInModel(
           LoginResult.fromJson(json['loginResult'] as Map<String, dynamic>),
     );
 
+
 LoginResult _$LoginResultFromJson(Map<String, dynamic> json) => LoginResult(
       userId: json['userId'] as String,
       name: json['name'] as String,
       token: json['token'] as String,
     );
+

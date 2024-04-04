@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:story_apps/common/common.dart';
 import 'package:story_apps/data/model/response_story_model.dart';
 import 'package:story_apps/provider/story_provider.dart';
 import 'package:story_apps/ui/map_page.dart';
 import 'package:story_apps/utils/response_state.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 class DetailStoryPage extends StatefulWidget {
   final String id;
@@ -131,21 +133,60 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
             ),
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            if (story.lat != null && story.lon != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      MapPage(lat: story.lat!, lon: story.lon!),
-                ),
-              );
-            }
-          },
-          child: const Text('Lihat di Peta'),
+        const SizedBox(height: 15),
+        story.lat != null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: FutureBuilder<String>(
+                    future: _storyLocation(story),
+                    builder: (_, snapshot) {
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.location_on_sharp,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            snapshot.data ?? '',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      );
+                    }),
+              )
+            : const SizedBox(),
+        const SizedBox(height: 25),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: ElevatedButton(
+            onPressed: () {
+              if (story.lat != null && story.lon != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapPage(
+                      id: story.id,
+                      lat: story.lat.toString(),
+                      lon: story.lon.toString(),
+                    ),
+                  ),
+                );
+              }
+            },
+            child: const Text('Lihat di Peta'),
+          ),
         ),
       ],
     );
+  }
+
+  Future<String> _storyLocation(Story story) async {
+    final latLng = LatLng(story.lat!, story.lon!);
+    final info =
+        await geo.placemarkFromCoordinates(latLng.latitude, latLng.longitude);
+    final place = info[0];
+
+    return place.subAdministrativeArea ?? '';
   }
 }

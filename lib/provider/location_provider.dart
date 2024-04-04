@@ -1,33 +1,55 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:story_apps/utils/response_state.dart';
 
 class LocationProvider extends ChangeNotifier {
-  double? _selectedLat;
-  double? _selectedLon;
+  String? imagePath;
+  XFile? imageFile;
+  ResultState? state;
+  String? location;
+  LatLng? latLng;
 
-  File? _imageFile;
-  File? get imageFile => _imageFile;
-
-  double? get selectedLat => _selectedLat;
-  double? get selectedLon => _selectedLon;
-
-
-  void setImageFile(File? imageFile) {
-    _imageFile = imageFile;
+  void setImagePath(String? value) {
+    imagePath = value;
     notifyListeners();
   }
 
-  void setLocation(double lat, double lon) {
-    _selectedLat = lat;
-    _selectedLon = lon;
+  void setImageFile(XFile? value) {
+    imageFile = value;
     notifyListeners();
   }
 
-  void deleteLocation() {
-    _selectedLat = null;
-    _selectedLon = null;
+  void setLocation(String? loc, LatLng? latLon) {
+    location = loc;
+    latLng = latLon;
     notifyListeners();
   }
 
+  void setResponseState(ResultState? value) {
+    state = value;
+    notifyListeners();
+  }
+
+  void fromGallery() async {
+    setResponseState(ResultState.loading);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setImageFile(pickedFile);
+      setImagePath(pickedFile.path);
+    }
+    setResponseState(ResultState.done);
+  }
+
+  void fromCamera() async {
+    setResponseState(ResultState.loading);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setImageFile(pickedFile);
+      setImagePath(pickedFile.path);
+    }
+    setResponseState(ResultState.done);
+  }
 }
