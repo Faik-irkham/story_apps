@@ -16,5 +16,6 @@
   "buttonLogoutTitle": "Logout",
   "homeNavLabel": "Home",
   "uploadNavLabel": "Upload",
-  "profileNavLabel": "Profile"
+  "profileNavLabel": "Profile",
+  "addLocationTitle": "Add location"
 }

@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:story_apps/build_variant/flavor_config.dart';
 import 'package:story_apps/common/common.dart';
 import 'package:story_apps/provider/credential_provider.dart';
 import 'package:story_apps/provider/location_provider.dart';
@@ -30,10 +32,12 @@ class _AddStoryPageState extends State<AddStoryPage> {
 
   @override
   void dispose() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _locationProvider.setLocation(null, null);
+      _locationProvider.setImageFile(null);
+      _locationProvider.setImagePath(null);
+    });
     super.dispose();
-    _locationProvider.setLocation(null, null);
-    _locationProvider.setImageFile(null);
-    _locationProvider.setImagePath(null);
   }
 
   @override
@@ -42,7 +46,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
       appBar: AppBar(
         backgroundColor: Colors.black38,
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () {
+            context.goNamed('bottomNav');
+          },
           icon: const Icon(
             Icons.close,
           ),
@@ -148,51 +154,61 @@ class _AddStoryPageState extends State<AddStoryPage> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Consumer<LocationProvider>(
-                          builder: (context, provider, state) {
-                        return SizedBox(
-                          child: provider.location == null
-                              ? GestureDetector(
-                                  onTap: () => context.goNamed('map_pick'),
-                                  child: const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.location_on_sharp,
-                                            color: Colors.white,
+                      FlavorConfig.instance.flavor == FlavorType.paid
+                          ? Consumer<LocationProvider>(
+                              builder: (context, provider, state) {
+                                return SizedBox(
+                                  child: provider.location == null
+                                      ? GestureDetector(
+                                          onTap: () =>
+                                              context.goNamed('map_pick'),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.location_on_sharp,
+                                                    color: Colors.white,
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  Text(
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .addLocationTitle,
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Icon(Icons
+                                                  .arrow_forward_ios_rounded),
+                                            ],
                                           ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            'addLocation',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ),
-                                      Icon(Icons.arrow_forward_ios_rounded),
-                                    ],
-                                  ),
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.location_on_sharp),
-                                        const SizedBox(width: 10),
-                                        Text(provider.location!),
-                                      ],
-                                    ),
-                                    const Icon(Icons.arrow_forward_ios_rounded),
-                                  ],
-                                ),
-                        );
-                      }),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                    Icons.location_on_sharp),
+                                                const SizedBox(width: 10),
+                                                Text(provider.location!),
+                                              ],
+                                            ),
+                                            const Icon(Icons
+                                                .arrow_forward_ios_rounded),
+                                          ],
+                                        ),
+                                );
+                              },
+                            )
+                          : const SizedBox(),
                       const SizedBox(height: 25),
                       Consumer3<StoryProvider, CredentialProvider,
                           LocationProvider>(

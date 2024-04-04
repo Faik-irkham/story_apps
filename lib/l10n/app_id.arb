@@ -16,5 +16,6 @@
   "buttonLogoutTitle": "Keluar",
   "homeNavLabel": "Beranda",
   "uploadNavLabel": "Unggah",
-  "profileNavLabel": "Profil"
+  "profileNavLabel": "Profil",
+  "addLocationTitle": "Tambah lokasi"
 }
