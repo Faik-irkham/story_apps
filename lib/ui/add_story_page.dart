@@ -184,8 +184,10 @@ class _AddStoryPageState extends State<AddStoryPage> {
                                                   ),
                                                 ],
                                               ),
-                                              const Icon(Icons
-                                                  .arrow_forward_ios_rounded),
+                                              const Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                color: Colors.white,
+                                              ),
                                             ],
                                           ),
                                         )
@@ -196,13 +198,21 @@ class _AddStoryPageState extends State<AddStoryPage> {
                                             Row(
                                               children: [
                                                 const Icon(
-                                                    Icons.location_on_sharp),
+                                                  Icons.location_on_sharp,
+                                                  color: Colors.white,
+                                                ),
                                                 const SizedBox(width: 10),
-                                                Text(provider.location!),
+                                                Text(
+                                                  provider.location!,
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
                                               ],
                                             ),
-                                            const Icon(Icons
-                                                .arrow_forward_ios_rounded),
+                                            const Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: Colors.white,
+                                            ),
                                           ],
                                         ),
                                 );

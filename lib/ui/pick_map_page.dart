@@ -126,6 +126,10 @@ class _PickMapPageState extends State<PickMapPage> {
     final marker = Marker(
       markerId: const MarkerId('source'),
       position: latLng,
+      infoWindow: InfoWindow(
+        title: street,
+        snippet: address,
+      ),
     );
 
     setState(() {
